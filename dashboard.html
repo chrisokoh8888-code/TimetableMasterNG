@@ -105,7 +105,16 @@ function generate() {
 
   generationCount++;
 
-  let timetable = "Sample timetable " + new Date().toLocaleString();
+  // STEP 2 FIX
+let timetable = {
+  Monday: { P1: "Math", P2: "English", P3: "Biology", P4: "Physics", P5: "Chemistry", P6: "Civic" },
+  Tuesday: { P1: "English", P2: "Math", P3: "Chemistry", P4: "Biology", P5: "Physics", P6: "Civic" },
+  Wednesday: { P1: "Biology", P2: "Physics", P3: "Math", P4: "English", P5: "Chemistry", P6: "Civic" },
+  Thursday: { P1: "Physics", P2: "Chemistry", P3: "English", P4: "Math", P5: "Biology", P6: "Civic" },
+  Friday: { P1: "Chemistry", P2: "Biology", P3: "Physics", P4: "Math", P5: "English", P6: "Civic" }
+};
+
+saveTimetable(JSON.stringify(timetable));
 
   saveTimetable(timetable);
 }
