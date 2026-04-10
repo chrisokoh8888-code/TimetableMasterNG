@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard</title>
+</head>
+<body>
+
+<h1>Welcome to Timetable Master NG</h1>
+
+<p id="status"></p>
+
+<button onclick="generate()">Generate Timetable</button>
+<button onclick="exportPDF()">Export PDF</button>
+<button onclick="logout()">Logout</button>
+
+<script>
+let isDemo = localStorage.getItem("demo") === "true";
+let isPremium = localStorage.getItem("premium") === "true";
+
+let generationCount = 0;
+
+if (isPremium) {
+  status.innerText = "✅ Premium Active";
+} else {
+  status.innerText = "⚠️ Demo Mode (Limited Access)";
+}
+
+// GENERATE
+function generate() {
+  if (!isPremium && generationCount >= 1) {
+    alert("Demo limit reached. Upgrade now.");
+    return;
+  }
+
+  generationCount++;
+  alert("Timetable Generated!");
+}
+
+// EXPORT
+function exportPDF() {
+  if (!isPremium) {
+    alert("Upgrade to export");
+    return;
+  }
+
+  alert("Exporting PDF...");
+}
+
+// LOGOUT
+function logout() {
+  localStorage.clear();
+  window.location.href = "login.html";
+}
+</script>
+
+</body>
+</html>
