@@ -86,7 +86,11 @@ auth.onAuthStateChanged((user) => {
         isPremium = true;
         status.innerText = "✅ Premium Active";
       } else {
-        status.innerText = "⚠️ Demo Mode";
+        status.innerHTML = `
+  ⚠️ Demo Mode - 1 Free Generation
+  <br><br>
+  <button onclick="window.location.href='payment.html'">Upgrade Now 🚀</button>
+`;
       }
 
       loadTimetables();
@@ -152,14 +156,17 @@ function loadTimetables() {
 
         html += `
           <div style="border:1px solid #ccc; padding:10px; margin:10px;">
-            <p><strong>Date:</strong> ${new Date(data.createdAt.seconds * 1000).toLocaleString()}</p>
+            <p><strong>Date:</strong> $new Date(data.createdAt?.seconds * 1000 || Date.now()).toLocaleString()}</p>
             <button onclick="viewTimetable('${data.timetable}')">View</button>
             <button onclick="deleteTimetable('${doc.id}')">Delete</button>
           </div>
         `;
       });
 
-      timetableList.innerHTML = html || "No timetables yet.";
+      timetableList.innerHTML = html || `
+  <p>No timetables yet.</p>
+  <button onclick="generate()">Generate Your First Timetable</button>
+`;
 
     });
 }
