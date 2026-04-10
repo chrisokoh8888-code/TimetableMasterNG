@@ -2,6 +2,28 @@
 <html>
 <head>
   <title>Dashboard - Timetable Master NG</title>
+  <style>
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th {
+  background: #0d47a1;
+  color: white;
+  padding: 10px;
+}
+
+td {
+  padding: 10px;
+  text-align: center;
+}
+
+tr:nth-child(even) {
+  background: #f2f2f2;
+}
+  </style>
 </head>
 <body>
 
@@ -18,7 +40,14 @@
 
 <h2>📂 Saved Timetables</h2>
 <div id="timetableList">Loading...</div>
+<!-- TIMETABLE VIEWER -->
+<div id="viewer" style="display:none; margin-top:20px;">
+  <h2>📅 Timetable Preview</h2>
 
+  <button onclick="closeViewer()">❌ Close</button>
+
+  <div id="tableContainer"></div>
+</div>
 <hr>
 
 <button onclick="logout()">Logout</button>
@@ -129,7 +158,37 @@ function loadTimetables() {
 
 // VIEW
 function viewTimetable(data) {
-  alert(data); // later upgrade to modal
+
+  let timetable = JSON.parse(data);
+
+  let days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+  let periods = ["P1", "P2", "P3", "P4", "P5", "P6"];
+
+  let html = "<table border='1'>";
+
+  // HEADER
+  html += "<tr><th>Period</th>";
+  days.forEach(day => {
+    html += `<th>${day}</th>`;
+  });
+  html += "</tr>";
+
+  // ROWS
+  periods.forEach(period => {
+    html += `<tr><td><b>${period}</b></td>`;
+
+    days.forEach(day => {
+      let subject = timetable[day]?.[period] || "";
+      html += `<td>${subject}</td>`;
+    });
+
+    html += "</tr>";
+  });
+
+  html += "</table>";
+
+  document.getElementById("tableContainer").innerHTML = html;
+  document.getElementById("viewer").style.display = "block";
 }
 
 
@@ -147,6 +206,9 @@ function deleteTimetable(id) {
 function logout() {
   auth.signOut();
 }
+  function closeViewer() {
+  document.getElementById("viewer").style.display = "none";
+  }
 </script>
 
 </body>
