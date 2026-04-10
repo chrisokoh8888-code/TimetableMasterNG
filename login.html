@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login - Timetable Master NG</title>
+
+  <!-- LINK CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<div class="container">
+
+  <h2>Login / Signup</h2>
+
+  <input type="email" id="email" placeholder="Enter Email">
+  <input type="password" id="password" placeholder="Enter Password">
+
+  <button onclick="signup()">Sign Up</button>
+  <button onclick="login()">Login</button>
+
+  <p id="message"></p>
+
+</div>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<!-- LINK JS -->
+<script src="js/script.js"></script>
+
+</body>
+</html>
