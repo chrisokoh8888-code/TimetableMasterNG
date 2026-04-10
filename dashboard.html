@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard - Timetable Master NG</title>
+
+  <!-- =========================
+       STYLES (UI IMPROVED)
+  ========================== -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f5f7fa;
+    }
+
+    h1 {
+      color: #0d47a1;
+    }
+
+    button {
+      padding: 8px 12px;
+      margin: 5px;
+      border: none;
+      background: #0d47a1;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background: #08306b;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th {
+      background: #0d47a1;
+      color: white;
+      padding: 10px;
+    }
+
+    td {
+      padding: 10px;
+      text-align: center;
+    }
+
+    tr:nth-child(even) {
+      background: #f2f2f2;
+    }
+
+    #viewer {
+      background: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>🏫 Timetable Dashboard</h1>
+
+<!-- STATUS (DEMO / PREMIUM) -->
+<p id="status"></p>
+
+<hr>
+
+<h2>📅 Generate New Timetable</h2>
+<button onclick="generate()">Generate Timetable</button>
+
+<hr>
+
+<h2>📂 Saved Timetables</h2>
+<div id="timetableList">Loading...</div>
+
+<!-- =========================
+     TIMETABLE VIEWER
+========================= -->
+<div id="viewer" style="display:none;">
+  <h2>📅 Timetable Preview</h2>
+  <button onclick="closeViewer()">❌ Close</button>
+  <div id="tableContainer"></div>
+</div>
+
+<hr>
+
+<button onclick="logout()">Logout</button>
+
+<!-- =========================
+     FIREBASE (FIXED VERSION)
+========================= -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+
+/* =========================
+   FIREBASE CONFIG
+   (PUT YOUR REAL KEYS HERE)
+========================= */
+const firebaseConfig = {
+  apiKey: "YOUR_KEY",
+  authDomain: "YOUR_DOMAIN",
+  projectId: "YOUR_ID",
+};
+
+firebase.initializeApp(firebaseConfig);
+
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+/* =========================
+   GLOBAL STATE
+========================= */
+let isPremium = false;
+let generationCount = 0;
+
+/* =========================
+   AUTH CHECK
+========================= */
+auth.onAuthStateChanged((user) => {
+  if (!user) {
+    window.location.href = "login.html";
+  } else {
+
+    db.collection("users").doc(user.uid).get()
+    .then(doc => {
+
+      let data = doc.data() || {};
+
+      // PLAN CHECK
+      if (data.plan === "premium") {
+        isPremium = true;
+        document.getElementById("status").innerText = "✅ Premium Active";
+      } else {
+        document.getElementById("status").innerHTML = `
+          ⚠️ Demo Mode - 1 Free Generation
+          <br><br>
+          <button onclick="window.location.href='payment.html'">Upgrade Now 🚀</button>
+        `;
+      }
+
+      loadTimetables();
+
+    });
+  }
+});
+
+
+/* =========================
+   GENERATE TIMETABLE
+   (NOW JSON SAFE)
+========================= */
+function generate() {
+
+  // DEMO LIMIT
+  if (!isPremium && generationCount >= 1) {
+    alert("Demo limit reached. Upgrade to continue.");
+    return;
+  }
+
+  generationCount++;
+
+  // SAMPLE STRUCTURE (READY FOR REAL ENGINE)
+  let timetable = {
+    Monday: { P1: "Math", P2: "English", P3: "Biology", P4: "Physics", P5: "Chemistry", P6: "Civic" },
+    Tuesday: { P1: "English", P2: "Math", P3: "Chemistry", P4: "Biology", P5: "Physics", P6: "Civic" },
+    Wednesday: { P1: "Biology", P2: "Physics", P3: "Math", P4: "English", P5: "Chemistry", P6: "Civic" },
+    Thursday: { P1: "Physics", P2: "Chemistry", P3: "English", P4: "Math", P5: "Biology", P6: "Civic" },
+    Friday: { P1: "Chemistry", P2: "Biology", P3: "Physics", P4: "Math", P5: "English", P6: "Civic" }
+  };
+
+  saveTimetable(JSON.stringify(timetable));
+}
+
+
+/* =========================
+   SAVE TO FIRESTORE
+========================= */
+function saveTimetable(data) {
+  let user = auth.currentUser;
+
+  db.collection("timetables").add({
+    userId: user.uid,
+    timetable: data,
+    createdAt: new Date()
+  }).then(() => {
+    alert("Saved!");
+    loadTimetables();
+  });
+}
+
+
+/* =========================
+   LOAD TIMETABLES
+========================= */
+function loadTimetables() {
+  let user = auth.currentUser;
+
+  db.collection("timetables")
+    .where("userId", "==", user.uid)
+    .orderBy("createdAt", "desc")
+    .get()
+    .then(snapshot => {
+
+      let html = "";
+
+      snapshot.forEach(doc => {
+        let data = doc.data();
+
+        html += `
+          <div style="border:1px solid #ccc; padding:10px; margin:10px; background:white;">
+            <p><strong>Date:</strong> 
+              ${new Date(data.createdAt?.seconds * 1000 || Date.now()).toLocaleString()}
+            </p>
+
+            <!-- SAFE BUTTON (NO BREAKING) -->
+            <button onclick='viewTimetable(${JSON.stringify(data.timetable)})'>View</button>
+
+            <button onclick="deleteTimetable('${doc.id}')">Delete</button>
+          </div>
+        `;
+      });
+
+      // BETTER UX
+      document.getElementById("timetableList").innerHTML = html || `
+        <p>No timetables yet.</p>
+        <button onclick="generate()">Generate Your First Timetable</button>
+      `;
+    });
+}
+
+
+/* =========================
+   VIEW TIMETABLE GRID
+========================= */
+function viewTimetable(data) {
+
+  let timetable = JSON.parse(data);
+
+  let days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+  let periods = ["P1", "P2", "P3", "P4", "P5", "P6"];
+
+  let html = "<table>";
+
+  // HEADER
+  html += "<tr><th>Period</th>";
+  days.forEach(day => html += `<th>${day}</th>`);
+  html += "</tr>";
+
+  // ROWS
+  periods.forEach(period => {
+    html += `<tr><td><b>${period}</b></td>`;
+
+    days.forEach(day => {
+      let subject = timetable[day]?.[period] || "";
+      html += `<td>${subject}</td>`;
+    });
+
+    html += "</tr>";
+  });
+
+  html += "</table>";
+
+  document.getElementById("tableContainer").innerHTML = html;
+  document.getElementById("viewer").style.display = "block";
+}
+
+
+/* =========================
+   DELETE TIMETABLE
+========================= */
+function deleteTimetable(id) {
+  db.collection("timetables").doc(id).delete()
+  .then(() => {
+    alert("Deleted");
+    loadTimetables();
+  });
+}
+
+
+/* =========================
+   CLOSE VIEWER
+========================= */
+function closeViewer() {
+  document.getElementById("viewer").style.display = "none";
+}
+
+
+/* =========================
+   LOGOUT
+========================= */
+function logout() {
+  auth.signOut();
+}
+
+</script>
+
+</body>
+</html>
