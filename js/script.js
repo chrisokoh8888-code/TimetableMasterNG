@@ -217,29 +217,127 @@ function generate() {
   let periods = createPeriods(schoolData.periodsPerDay);
 
   let timetable = {};
+  let teacherSchedule = {}; // Prevent clashes
 
-  // LOOP CLASSES
+  // ==========================
+  // MAP SUBJECT → TEACHER
+  // ==========================
+  let teacherMap = {};
+
+  schoolData.teachers.forEach(t => {
+    teacherMap[t.subject] = t;
+  });
+
+  // ==========================
+  // LOOP THROUGH CLASSES
+  // ==========================
   schoolData.classes.forEach(cls => {
 
     timetable[cls.name] = {};
 
+    // INIT CLASS GRID
     days.forEach(day => {
       timetable[cls.name][day] = {};
-
-      periods.forEach(period => {
-
-        let subject =
-          schoolData.subjects[
-            Math.floor(Math.random() * schoolData.subjects.length)
-          ];
-
-        timetable[cls.name][day][period] = subject.name;
+      periods.forEach(p => {
+        timetable[cls.name][day][p] = null;
       });
     });
+
+    // ==========================
+    // ASSIGN SUBJECTS BASED ON PERIODS
+    // ==========================
+    schoolData.subjects.forEach(sub => {
+
+      let count = 0;
+      let attempts = 0;
+
+      while (count < sub.periods && attempts < 200) {
+
+        attempts++;
+
+        let day = days[Math.floor(Math.random() * days.length)];
+        let periodIndex = Math.floor(Math.random() * periods.length);
+        let period = periods[periodIndex];
+
+        let teacher = teacherMap[sub.name];
+        if (!teacher) continue;
+
+        // Skip if already filled
+        if (timetable[cls.name][day][period]) continue;
+
+        // ==========================
+        // TEACHER CLASH CHECK
+        // ==========================
+        if (!teacherSchedule[teacher.name]) {
+          teacherSchedule[teacher.name] = {};
+        }
+
+        if (!teacherSchedule[teacher.name][day]) {
+          teacherSchedule[teacher.name][day] = [];
+        }
+
+        if (teacherSchedule[teacher.name][day].includes(period)) {
+          continue;
+        }
+
+        // ==========================
+        // TEACHER DAILY LIMIT
+        // ==========================
+        let dailyLoad = teacherSchedule[teacher.name][day].length;
+
+        if (dailyLoad >= teacher.maxPerDay) continue;
+
+        // ==========================
+        // ASSIGN
+        // ==========================
+        timetable[cls.name][day][period] = sub.name;
+
+        teacherSchedule[teacher.name][day].push(period);
+
+        count++;
+
+        // ==========================
+        // DOUBLE PERIOD LOGIC
+        // ==========================
+        if (
+          sub.double &&
+          periodIndex < periods.length - 1
+        ) {
+
+          let nextPeriod = periods[periodIndex + 1];
+
+          if (
+            !timetable[cls.name][day][nextPeriod] &&
+            !teacherSchedule[teacher.name][day].includes(nextPeriod)
+          ) {
+            timetable[cls.name][day][nextPeriod] = sub.name;
+            teacherSchedule[teacher.name][day].push(nextPeriod);
+            count++;
+          }
+        }
+      }
+
+      if (count < sub.periods) {
+        console.warn("⚠️ Could not fully assign:", sub.name);
+      }
+
+    });
+
+    // ==========================
+    // FILL EMPTY SLOTS
+    // ==========================
+    days.forEach(day => {
+      periods.forEach(p => {
+        if (!timetable[cls.name][day][p]) {
+          timetable[cls.name][day][p] = "Free";
+        }
+      });
+    });
+
   });
 
   saveTimetable(JSON.stringify(timetable));
-}
+    }
 
 
 // ==========================
