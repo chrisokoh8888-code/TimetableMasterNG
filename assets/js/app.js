@@ -228,3 +228,6 @@ function resetAll() {
 function saveSettings() {
   alert("Settings saved!");
 }
+// Make subject functions accessible in HTML
+window.addSubject = addSubject;
+window.removeSubject = removeSubject;
