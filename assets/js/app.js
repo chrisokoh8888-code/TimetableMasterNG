@@ -7,15 +7,6 @@ const COLORS = ['#185FA5','#3B6D11','#BA7517','#A32D2D','#534AB7','#0F6E56','#99
 const ROOM_ICONS = {Classroom:'🏫',Lab:'🔬',Studio:'🎨','Gym / Hall':'🏃','Lecture hall':'🎓',Library:'📖'};
 const DAYS = ['Monday','Tuesday','Wednesday','Thursday','Friday'];
 
-let state = {
-  inst: 'Nursery',
-  subjects: [],
-  staff: [],
-  rooms: [],
-  timetable: null
-};
-
-let currentTTClass = null;
 
 // =======================
 // NAVIGATION
