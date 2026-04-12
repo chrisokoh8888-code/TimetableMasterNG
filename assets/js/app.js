@@ -1,5 +1,5 @@
 
-alert("APP IS RUNNING");
+throw new Error("FORCE ERROR");
 // =======================
 // IMPORTS (MUST BE AT TOP)
 import { state, DAYS, resetState } from './state.js';
