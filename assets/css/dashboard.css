@@ -229,3 +229,7 @@ table th, table td {
   background: white;
   color: #0d47a1;
 }
+.main {
+  margin-left: 240px;
+  padding: 20px;
+}
