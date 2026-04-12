@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Timetable Master NG Dashboard</title>
+
+<link rel="stylesheet" href="assets/css/dashboard.css">
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">Timetable Master NG</div>
+      <div class="logo-sub">Smart scheduler</div>
+    </div>
+
+    <div class="nav-section">Setup</div>
+
+    <div class="nav-item active" onclick="nav('institution', this)">🏫 Institution</div>
+    <div class="nav-item" onclick="nav('calendar', this)">📅 Calendar & Time</div>
+    <div class="nav-item" onclick="nav('structure', this)">🏛️ Academic Structure</div>
+    <div class="nav-item" onclick="nav('subjects', this)">📚 Subjects</div>
+    <div class="nav-item" onclick="nav('staff', this)">👩‍🏫 Staff</div>
+    <div class="nav-item" onclick="nav('rooms', this)">🏠 Rooms</div>
+    <div class="nav-item" onclick="nav('constraints', this)">⚙️ Constraints</div>
+
+    <div class="nav-section">Output</div>
+
+    <div class="nav-item" onclick="nav('generate', this)">✨ Generate</div>
+    <div class="nav-item" onclick="nav('timetable', this)">📋 View Timetable</div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main">
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <h2 id="page-title">Institution Setup</h2>
+      <div>
+        <button class="btn" onclick="resetAll()">Reset</button>
+        <button class="btn primary" onclick="saveSettings()">Save Settings</button>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <!-- INSTITUTION -->
+      <div class="page active" id="page-institution">
+        <h2>Institution Setup</h2>
+        <input type="text" placeholder="School Name">
+      </div>
+
+      <!-- CALENDAR -->
+      <div class="page" id="page-calendar">
+        <h2>Calendar & Time</h2>
+        <p>Coming soon...</p>
+      </div>
+
+      <!-- STRUCTURE -->
+      <div class="page" id="page-structure">
+        <h2>Academic Structure</h2>
+        <p>Coming soon...</p>
+      </div>
+
+      <!-- SUBJECTS -->
+      <div class="page" id="page-subjects">
+        <h2>Subjects</h2>
+
+        <div id="subj-list"></div>
+
+        <input type="text" id="new-subj" placeholder="Subject">
+        <input type="number" id="new-subj-periods" placeholder="Periods">
+        <button onclick="addSubject()">Add Subject</button>
+      </div>
+
+      <!-- STAFF -->
+      <div class="page" id="page-staff">
+        <h2>Staff</h2>
+
+        <div id="staff-list"></div>
+
+        <input type="text" id="new-staff" placeholder="Teacher Name">
+        <button onclick="addStaff()">Add Staff</button>
+      </div>
+
+      <!-- ROOMS -->
+      <div class="page" id="page-rooms">
+        <h2>Rooms</h2>
+
+        <div id="room-list"></div>
+
+        <input type="text" id="new-room" placeholder="Room Name">
+        <button onclick="addRoom()">Add Room</button>
+      </div>
+
+      <!-- CONSTRAINTS -->
+      <div class="page" id="page-constraints">
+        <h2>Constraints</h2>
+        <p>Coming soon...</p>
+      </div>
+
+      <!-- GENERATE -->
+      <div class="page" id="page-generate">
+        <h2>Generate Timetable</h2>
+        <button onclick="generateTimetable()">Generate</button>
+      </div>
+
+      <!-- TIMETABLE -->
+      <div class="page" id="page-timetable">
+        <h2>Timetable</h2>
+
+        <button onclick="doExport('pdf')">Export PDF</button>
+        <button onclick="doExport('excel')">Export Excel</button>
+
+        <table id="tt-table"></table>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- ✅ VERY IMPORTANT: SCRIPT AT BOTTOM -->
+<script type="module" src="assets/js/app.js"></script>
+
+</body>
+</html>
