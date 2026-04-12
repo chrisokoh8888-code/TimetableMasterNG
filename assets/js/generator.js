@@ -2,8 +2,7 @@
 // GENERATOR MODULE
 // =======================
 
-import { state, DAYS } from '../data/state.js';
-
+import { state, DAYS } from './state.js';
 // Generate Timetable
 export function generateTimetable() {
   if (state.subjects.length === 0) {
