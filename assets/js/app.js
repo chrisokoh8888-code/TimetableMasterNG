@@ -4,6 +4,8 @@ import { state, COLORS, DAYS, resetState } from './state.js';
 import { addSubject, renderSubjects, removeSubject } from './subjects.js';
 import { addStaff, renderStaff, removeStaff } from './staff.js';
 import { addRoom, renderRooms, removeRoom } from './rooms.js';
+import { generateTimetable } from './generator.js';
+import { doExport } from './export.js';
 
 // =======================
 // NAVIGATION
