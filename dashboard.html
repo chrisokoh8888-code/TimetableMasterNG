@@ -78,13 +78,35 @@
     <input type="number" id="break-duration" placeholder="e.g 20">
 
     <label>Days of Operation</label>
-    <div>
-      <label><input type="checkbox" value="Monday"> Monday</label><br>
-      <label><input type="checkbox" value="Tuesday"> Tuesday</label><br>
-      <label><input type="checkbox" value="Wednesday"> Wednesday</label><br>
-      <label><input type="checkbox" value="Thursday"> Thursday</label><br>
-      <label><input type="checkbox" value="Friday"> Friday</label>
-    </div>
+
+<div class="days-group">
+
+  <label class="day-item">
+    <input type="checkbox" value="Monday" onchange="saveCalendar()">
+    <span>Monday</span>
+  </label>
+
+  <label class="day-item">
+    <input type="checkbox" value="Tuesday" onchange="saveCalendar()">
+    <span>Tuesday</span>
+  </label>
+
+  <label class="day-item">
+    <input type="checkbox" value="Wednesday" onchange="saveCalendar()">
+    <span>Wednesday</span>
+  </label>
+
+  <label class="day-item">
+    <input type="checkbox" value="Thursday" onchange="saveCalendar()">
+    <span>Thursday</span>
+  </label>
+
+  <label class="day-item">
+    <input type="checkbox" value="Friday" onchange="saveCalendar()">
+    <span>Friday</span>
+  </label>
+
+</div>
 
   </div>
 
