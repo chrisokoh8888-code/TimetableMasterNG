@@ -2,7 +2,7 @@
 // ROOMS MODULE
 // =======================
 
-import { state } from '../data/state.js';
+import { state } from './state.js';
 
 // Add Room
 export function addRoom() {
