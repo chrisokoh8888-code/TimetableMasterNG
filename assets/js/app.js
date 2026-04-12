@@ -1,4 +1,5 @@
 import { state, COLORS, DAYS, resetState } from './state.js';
+import { addSubject, renderSubjects, removeSubject } from './subjects.js';
 // =======================
 // GLOBAL STATE
 // =======================
