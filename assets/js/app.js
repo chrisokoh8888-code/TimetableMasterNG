@@ -220,5 +220,14 @@ function saveSettings() {
   alert("Settings saved!");
 }
 // Make subject functions accessible in HTML
+// SUBJECTS
 window.addSubject = addSubject;
 window.removeSubject = removeSubject;
+
+// STAFF
+window.addStaff = addStaff;
+window.removeStaff = removeStaff;
+
+// ROOMS
+window.addRoom = addRoom;
+window.removeRoom = removeRoom;
