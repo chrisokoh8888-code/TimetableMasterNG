@@ -2,8 +2,7 @@
 // SUBJECTS MODULE
 // =======================
 
-import { state, COLORS } from '../data/state.js';
-
+import { state, COLORS } from './state.js';
 // Add Subject
 export function addSubject() {
   const name = document.getElementById('new-subj').value.trim();
