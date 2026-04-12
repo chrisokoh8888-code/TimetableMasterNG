@@ -1,3 +1,4 @@
+import { state, COLORS, DAYS, resetState } from './state.js';
 // =======================
 // GLOBAL STATE
 // =======================
