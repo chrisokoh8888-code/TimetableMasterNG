@@ -1,3 +1,4 @@
+import { state } from '../data/state.js';
 // =======================
 // SUBJECTS MODULE
 // =======================
