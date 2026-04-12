@@ -235,3 +235,10 @@ table th, table td {
   margin-left: 240px;
   padding: 20px;
 }
+.card input {
+  width: 100%;
+  padding: 10px;
+  margin: 8px 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
