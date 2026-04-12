@@ -130,6 +130,27 @@ function removeRoom(index) {
   state.rooms.splice(index, 1);
   renderRooms();
 }
+/* 👉 ADD IT HERE 👇 */
+// =======================
+// CALCULATE PERIODS
+// =======================
+function calculatePeriods() {
+  const cal = state.calendar;
+
+  if (!cal.startTime || !cal.endTime) return 6;
+
+  const start = new Date(`1970-01-01T${cal.startTime}:00`);
+  const end = new Date(`1970-01-01T${cal.endTime}:00`);
+
+  const totalMinutes = (end - start) / (1000 * 60);
+
+  const period = cal.periodDuration || 40;
+  const breakTime = cal.breakDuration || 0;
+
+  const block = period + breakTime;
+
+  return Math.floor(totalMinutes / block);
+}
 
 // =======================
 // GENERATE TIMETABLE
@@ -166,6 +187,23 @@ function generateTimetable() {
   renderTimetable();
 }
 
+function calculatePeriods() {
+  const cal = state.calendar;
+
+  if (!cal.startTime || !cal.endTime) return 6;
+
+  const start = new Date(`1970-01-01T${cal.startTime}:00`);
+  const end = new Date(`1970-01-01T${cal.endTime}:00`);
+
+  const totalMinutes = (end - start) / (1000 * 60);
+
+  const period = cal.periodDuration || 40;
+  const breakTime = cal.breakDuration || 0;
+
+  const block = period + breakTime;
+
+  return Math.floor(totalMinutes / block);
+}
 // =======================
 // RENDER TIMETABLE
 // =======================
