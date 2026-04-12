@@ -1,3 +1,5 @@
+
+alert("APP IS RUNNING");
 // =======================
 // IMPORTS (MUST BE AT TOP)
 import { state, DAYS, resetState } from '../data/state.js';
