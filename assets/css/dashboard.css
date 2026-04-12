@@ -16,7 +16,7 @@ body {
    SIDEBAR
 ======================= */
 .sidebar {
-  width: 240px;
+  width: 200px; /* reduced from 240 */
   background: #0d47a1;
   color: white;
   height: 100vh;
@@ -65,7 +65,7 @@ body {
    MAIN LAYOUT
 ======================= */
 .main {
-  margin-left: 240px;
+  margin-left: 200px;
   padding: 20px;
   width: 100%;
 }
