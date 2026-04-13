@@ -347,25 +347,57 @@ function renderTimetable() {
 
   const table = document.getElementById('tt-table');
   const tt = state.timetable;
-  const cls = tt.classes[0];
 
   const activeDays = state.calendar.days.length ? state.calendar.days : DAYS;
 
-  let html = "<tr><th>Period</th>";
+  let html = "";
 
-  activeDays.forEach(d => html += `<th>${d}</th>`);
-  html += "</tr>";
+  // 🔥 LOOP THROUGH ALL CLASSES (NEW)
+  tt.classes.forEach(cls => {
 
-  for (let i = 0; i < tt.grid[cls][activeDays[0]].length; i++) {
-    html += `<tr><td>${i + 1}</td>`;
+    html += `
+      <tr>
+        <td colspan="${activeDays.length + 1}" style="
+          font-weight:bold;
+          background:#0d47a1;
+          color:white;
+          padding:10px;
+          text-align:left;
+        ">
+          📘 ${cls}
+        </td>
+      </tr>
+    `;
 
-    activeDays.forEach(d => {
-      const slot = tt.grid[cls][d][i];
-      html += `<td style="background:${slot.color}22;color:${slot.color}">${slot.label}</td>`;
-    });
-
+    // Header
+    html += "<tr><th>Period</th>";
+    activeDays.forEach(d => html += `<th>${d}</th>`);
     html += "</tr>";
-  }
+
+    const periods = tt.grid[cls][activeDays[0]].length;
+
+    for (let i = 0; i < periods; i++) {
+      html += `<tr><td>${i + 1}</td>`;
+
+      activeDays.forEach(d => {
+        const slot = tt.grid[cls][d][i];
+
+        html += `
+          <td style="
+            background:${slot.color}22;
+            color:${slot.color};
+          ">
+            ${slot.label}
+          </td>
+        `;
+      });
+
+      html += "</tr>";
+    }
+
+    // spacing row
+    html += `<tr><td colspan="${activeDays.length + 1}" style="height:15px"></td></tr>`;
+  });
 
   table.innerHTML = html;
 }
