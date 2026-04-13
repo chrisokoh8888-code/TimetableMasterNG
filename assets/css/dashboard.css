@@ -78,8 +78,9 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  max-width: 900px;
+  margin: 0 auto;
 }
-
 .topbar button {
   padding: 8px 12px;
   border: none;
@@ -98,6 +99,9 @@ body {
 ======================= */
 .content {
   margin-top: 20px;
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* PAGES */
