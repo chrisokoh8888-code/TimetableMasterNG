@@ -66,8 +66,9 @@ body {
 ======================= */
 .main {
   margin-left: 200px;
-  padding: 20px;
-  width: 100%;
+  padding: 25px 20px;
+  width: calc(100% - 200px);
+  box-sizing: border-box;
 }
 
 /* =======================
