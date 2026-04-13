@@ -173,18 +173,30 @@ body {
 .inst-grid .card:hover {
   border: 2px solid #0d47a1;
 }
-
-/* =======================
-   INPUTS
-======================= */
-input {
+/* FORM CONTAINER */
+.form-group {
+  max-width: 500px;
+  margin: 0 auto;
+}
+/* INPUT FIELDS */
+input,
+select {
   width: 100%;
-  padding: 10px;
-  margin: 8px 0;
-  border-radius: 6px;
+  max-width: 500px;
+  display: block;
+  margin: 10px auto;
+  padding: 12px;
+  border-radius: 8px;
   border: 1px solid #ccc;
+  box-sizing: border-box;
+
 }
 
+/* BUTTONS INSIDE FORMS */
+.form-group button {
+  display: block;
+  margin: 10px auto;
+}
 /* =======================
    BUTTONS
 ======================= */
