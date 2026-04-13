@@ -1,0 +1,369 @@
+
+
+
+<div class="app">
+<nav class="sidebar">
+  <div class="logo"><div class="logo-mark">TimeTable Pro</div><div class="logo-sub">Smart scheduler</div></div>
+  <div class="nav-sec">Setup</div>
+  <div class="nav-item active" onclick="nav('institution',this)"><span class="nav-icon">🏫</span>Institution</div>
+  <div class="nav-item" onclick="nav('upload',this)"><span class="nav-icon">⬆️</span>Upload Data</div>
+  <div class="nav-item" onclick="nav('calendar',this)"><span class="nav-icon">📅</span>Calendar & Time</div>
+  <div class="nav-item" onclick="nav('structure',this)"><span class="nav-icon">🏛️</span>Academic Structure</div>
+  <div class="nav-item" onclick="nav('subjects',this)"><span class="nav-icon">📚</span>Subjects<span class="badge" id="subj-badge">0</span></div>
+  <div class="nav-item" onclick="nav('staff',this)"><span class="nav-icon">👩‍🏫</span>Staff<span class="badge" id="staff-badge">0</span></div>
+  <div class="nav-item" onclick="nav('rooms',this)"><span class="nav-icon">🏠</span>Rooms<span class="badge" id="room-badge">0</span></div>
+  <div class="nav-item" onclick="nav('constraints',this)"><span class="nav-icon">⚙️</span>Constraints</div>
+  <div class="nav-sec">Output</div>
+  <div class="nav-item" onclick="nav('generate',this)"><span class="nav-icon">✨</span>Generate</div>
+  <div class="nav-item" onclick="nav('timetable',this)"><span class="nav-icon">📋</span>View Timetable</div>
+</nav>
+
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title" id="page-title">Institution Setup</div>
+    <div class="topbar-actions">
+      <button class="btn" onclick="resetAll()">Reset</button>
+      <button class="btn primary" onclick="saveSettings(event)">Save Settings</button>
+    </div>
+  </div>
+  <div class="content">
+
+  <!-- INSTITUTION -->
+  <div class="page active" id="page-institution">
+    <div class="sec-card">
+      <div class="sec-hdr" onclick="tog(this)"><span class="si">🏫</span><span class="st">Institution type</span><span class="sa">▾</span></div>
+      <div class="sec-body">
+        <div class="inst-grid">
+          <div class="inst-card sel" onclick="selInst(this,'Nursery')"><div class="ii">🌱</div><div class="in">Nursery</div></div>
+          <div class="inst-card" onclick="selInst(this,'Primary')"><div class="ii">✏️</div><div class="in">Primary</div></div>
+          <div class="inst-card" onclick="selInst(this,'Secondary')"><div class="ii">📐</div><div class="in">Secondary</div></div>
+          <div class="inst-card" onclick="selInst(this,'College')"><div class="ii">🎒</div><div class="in">College</div></div>
+          <div class="inst-card" onclick="selInst(this,'Polytechnic')"><div class="ii">🔧</div><div class="in">Polytechnic</div></div>
+          <div class="inst-card" onclick="selInst(this,'University')"><div class="ii">🎓</div><div class="in">University</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="sec-card">
+      <div class="sec-hdr" onclick="tog(this)"><span class="si">ℹ️</span><span class="st">Institution details</span><span class="sa">▾</span></div>
+      <div class="sec-body">
+        <div class="fgrid">
+          <div class="fg full"><label class="fl">Institution name</label><input id="inst-name" placeholder="e.g. Greenfield Academy"/></div>
+          <div class="fg"><label class="fl">Academic year</label><input id="acad-year" value="2025/2026"/></div>
+          <div class="fg"><label class="fl">Session</label><select><option>Full day</option><option>Morning only</option><option>Afternoon only</option><option>Split session</option></select></div>
+          <div class="fg"><label class="fl">Term structure</label><select><option>3 Terms</option><option>2 Semesters</option><option>4 Quarters</option></select></div>
+          <div class="fg"><label class="fl">Locale</label><select><option>English (Nigeria)</option><option>English (UK)</option><option>English (US)</option><option>French</option></select></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══ UPLOAD PAGE ═══ -->
+  <div class="page" id="page-upload">
+
+    <!-- MASTER DROP ZONE -->
+    <div class="upload-master" id="master-drop"
+      ondragover="ev.preventDefault();this.classList.add('drag')"
+      ondragleave="this.classList.remove('drag')"
+      ondrop="handleMasterDrop(event)"
+      onclick="document.getElementById('master-input').click()">
+      <div class="um-icon">📂</div>
+      <div class="um-title">Drop your data file here or click to browse</div>
+      <div class="um-sub">Upload one file and we auto-detect subjects, staff, rooms and more</div>
+      <div class="um-formats">
+        <span class="fmt-badge fmt-csv">CSV</span>
+        <span class="fmt-badge fmt-xlsx">Excel .xlsx</span>
+        <span class="fmt-badge fmt-json">JSON</span>
+        <span class="fmt-badge fmt-txt">Tab-delimited .txt</span>
+      </div>
+      <input type="file" id="master-input" accept=".csv,.xlsx,.xls,.json,.txt" style="display:none" onchange="handleMasterFile(this.files[0])"/>
+    </div>
+
+    <!-- PER-SECTION UPLOAD CARDS -->
+    <div style="font-size:13px;font-weight:500;margin-bottom:10px;color:var(--txt2)">Or upload by section</div>
+    <div class="upload-cards">
+      <div class="upload-card" id="uc-subjects" onclick="triggerUpload('subjects')">
+        <div class="uc-icon">📚</div>
+        <div class="uc-name">Subjects</div>
+        <div class="uc-status">No file uploaded</div>
+        <div class="uc-formats">CSV · Excel · JSON</div>
+        <input type="file" id="fi-subjects" accept=".csv,.xlsx,.json,.txt" style="display:none" onchange="handleSectionFile('subjects',this.files[0])"/>
+      </div>
+      <div class="upload-card" id="uc-staff" onclick="triggerUpload('staff')">
+        <div class="uc-icon">👩‍🏫</div>
+        <div class="uc-name">Staff / Teachers</div>
+        <div class="uc-status">No file uploaded</div>
+        <div class="uc-formats">CSV · Excel · JSON</div>
+        <input type="file" id="fi-staff" accept=".csv,.xlsx,.json,.txt" style="display:none" onchange="handleSectionFile('staff',this.files[0])"/>
+      </div>
+      <div class="upload-card" id="uc-rooms" onclick="triggerUpload('rooms')">
+        <div class="uc-icon">🏠</div>
+        <div class="uc-name">Rooms</div>
+        <div class="uc-status">No file uploaded</div>
+        <div class="uc-formats">CSV · Excel · JSON</div>
+        <input type="file" id="fi-rooms" accept=".csv,.xlsx,.json,.txt" style="display:none" onchange="handleSectionFile('rooms',this.files[0])"/>
+      </div>
+      <div class="upload-card" id="uc-classes" onclick="triggerUpload('classes')">
+        <div class="uc-icon">🏛️</div>
+        <div class="uc-name">Classes / Levels</div>
+        <div class="uc-status">No file uploaded</div>
+        <div class="uc-formats">CSV · Excel · JSON</div>
+        <input type="file" id="fi-classes" accept=".csv,.xlsx,.json,.txt" style="display:none" onchange="handleSectionFile('classes',this.files[0])"/>
+      </div>
+      <div class="upload-card" id="uc-constraints" onclick="triggerUpload('constraints')">
+        <div class="uc-icon">⚙️</div>
+        <div class="uc-name">Constraints</div>
+        <div class="uc-status">No file uploaded</div>
+        <div class="uc-formats">JSON only</div>
+        <input type="file" id="fi-constraints" accept=".json" style="display:none" onchange="handleSectionFile('constraints',this.files[0])"/>
+      </div>
+      <div class="upload-card" id="uc-all" onclick="triggerUpload('all')">
+        <div class="uc-icon">📦</div>
+        <div class="uc-name">Full configuration</div>
+        <div class="uc-status">All params in one file</div>
+        <div class="uc-formats">JSON only</div>
+        <input type="file" id="fi-all" accept=".json" style="display:none" onchange="handleSectionFile('all',this.files[0])"/>
+      </div>
+    </div>
+
+    <!-- IMPORT LOG -->
+    <div id="import-log-wrap" style="display:none">
+      <div style="font-size:13px;font-weight:500;margin-bottom:8px">Import log</div>
+      <div class="upload-log" id="import-log"></div>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button class="btn ok" onclick="applyImport()">Apply imported data</button>
+        <button class="btn" onclick="clearLog()">Clear</button>
+      </div>
+    </div>
+
+    <!-- TEMPLATES -->
+    <div class="tmpl-section">
+      <div class="tmpl-title">Download blank templates</div>
+      <div class="tmpl-grid">
+        <button class="tmpl-btn" onclick="dlTemplate('subjects')"><span class="ti">📚</span>Subjects.csv</button>
+        <button class="tmpl-btn" onclick="dlTemplate('staff')"><span class="ti">👩‍🏫</span>Staff.csv</button>
+        <button class="tmpl-btn" onclick="dlTemplate('rooms')"><span class="ti">🏠</span>Rooms.csv</button>
+        <button class="tmpl-btn" onclick="dlTemplate('classes')"><span class="ti">🏛️</span>Classes.csv</button>
+        <button class="tmpl-btn" onclick="dlTemplate('full')"><span class="ti">📦</span>Full config.json</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CALENDAR -->
+  <div class="page" id="page-calendar">
+    <div class="sec-card">
+      <div class="sec-hdr" onclick="tog(this)"><span class="si">📅</span><span class="st">School days</span><span class="sa">▾</span></div>
+      <div class="sec-body">
+        <div class="day-chips">
+          <div class="dc sel" onclick="this.classList.toggle('sel')">Mon</div>
+          <div class="dc sel" onclick="this.classList.toggle('sel')">Tue</div>
+          <div class="dc sel" onclick="this.classList.toggle('sel')">Wed</div>
+          <div class="dc sel" onclick="this.classList.toggle('sel')">Thu</div>
+          <div class="dc sel" onclick="this.classList.toggle('sel')">Fri</div>
+          <div class="dc" onclick="this.classList.toggle('sel')">Sat</div>
+          <div class="dc" onclick="this.classList.toggle('sel')">Sun</div>
+        </div>
+      </div>
+    </div>
+    <div class="sec-card">
+      <div class="sec-hdr" onclick="tog(this)"><span class="si">⏰</span><span class="st">Time & periods</span><span class="sa">▾</span></div>
+      <div class="sec-body">
+        <div class="fgrid">
+          <div class="fg"><label class="fl">Start time</label><input type="time" value="07:30"/></div>
+          <div class="fg"><label class="fl">End time</label><input type="time" value="14:30"/></div>
+          <div class="fg"><label class="fl">Period duration (min)</label><select><option>30</option><option>40</option><option selected>45</option><option>60</option><option>90</option></select></div>
+          <div class="fg"><label class="fl">Periods per day</label><select><option>4</option><option>5</option><option selected>6</option><option>7</option><option>8</option><option>10</option></select></div>
+          <div class="fg"><label class="fl">Period labels</label><select><option>Period 1,2,3...</option><option>Block A,B,C...</option><option>Lesson 1,2,3...</option><option>Hour 1,2,3...</option></select></div>
+        </div>
+      </div>
+    </div>
+    <div class="sec-card">
+      <div class="sec-hdr" onclick="tog(this)"><span class="si">☕</span><span class="st">Breaks & special periods</span><span class="sa">▾</span></div>
+      <div class="sec-body">
+        <div class="tog-row"><div><div class="tl">Short break</div><div class="ts">After which period?</div></div><div style="display:flex;align-items:center;gap:10px"><select style="font-size:12px;padding:4px 8px;border:0.5px solid var(--brd2);border-radius:var(--rad);background:var(--bg2);color:var(--txt)"><option>After period 2</option><option>After period 3</option></select><label class="tog"><input type="checkbox" checked><span class="tog-track"></span><span class="tog-thumb"></span></label></div></div>
+        <div class="tog-row"><div><div class="tl">Lunch break</div><div class="ts">Duration in minutes</div></div><div style="display:flex;align-items:center;gap:10px"><input type="number" value="30" style="width:60px;font-size:12px;padding:4px 8px;border:0.5px solid var(--brd2);border-radius:var(--rad);background:var(--bg2);color:var(--txt)"/><label class="tog"><input type="checkbox" checked><span class="tog-track"></span><span class="tog-thumb"></span></label></div></div>
+        <div class="tog-row"><div><div class="tl">Assembly period</div></div><label class="tog"><input type="checkbox"><span class="tog-track"></span><span class="tog-thumb"></span></label></div>
+        <div class="tog-row"><div><div class="tl">Club / Games period</div></div><label class="tog"><input type="checkbox"><span class="tog-track"></span><span class="tog-thumb"></span></label></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STRUCTURE -->
+  <div class="page" id="page-structure">
+    <div class="sec-card">
+      <div class="sec-hdr" onclick="tog(this)"><span class="si">🏛️</span><span class="st">Year groups / levels</span><span class="sa">▾</span></div>
+      <div class="sec-body">
+        <div class="fgrid">
+          <div class="fg"><label class="fl">Level naming</label><select><option>Year 1,2...</option><option>JSS1,SSS1...</option><option>Grade 1,2...</option><option>Form 1,2...</option><option>100L,200L...</option><option>Custom</option></select></div>
+          <div class="fg"><label class="fl">Number of levels</label><select><option>1</option><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option></select></div>
+          <div class="fg"><label class="fl">Classes per level</label><select><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option></select></div>
+          <div class="fg"><label class="fl">Class suffix</label><select><option>A,B,C...</option><option>Gold,Silver...</option><option>1,2,3...</option><option>Custom</option></select></div>
+        </div>
+      </div>
+    </div>
+    <div class="sec-card">
+      <div class="sec-hdr" onclick="tog(this)"><span class="si">🔀</span><span class="st">Streams / tracks</span><span class="sa">▾</span></div>
+      <div class="sec-body">
+        <div class="tog-row"><div><div class="tl">Enable streams</div></div><label class="tog"><input type="checkbox" onchange="document.getElementById('streams-opts').style.display=this.checked?'block':'none'"><span class="tog-track"></span><span class="tog-thumb"></span></label></div>
+        <div id="streams-opts" style="display:none;margin-top:12px"><div class="day-chips"><div class="dc sel">Science</div><div class="dc sel">Arts</div><div class="dc sel">Commercial</div><div class="dc">Vocational</div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUBJECTS -->
+  <div class="page" id="page-subjects">
+    <div class="sec-card">
+      <div class="sec-hdr" onclick="tog(this)"><span class="si">📚</span><span class="st">Subject list</span><span class="sa">▾</span></div>
+      <div class="sec-body">
+        <div class="item-list" id="subj-list"></div>
+        <div class="add-row">
+          <input id="new-subj" placeholder="Subject name"/>
+          <select id="new-subj-type"><option>Core</option><option>Elective</option><option>Practical</option><option>Lab</option><option>PE</option><option>Tutorial</option></select>
+          <input type="number" id="new-subj-per" placeholder="×/wk" style="width:80px"/>
+          <button class="btn primary" onclick="addSubject()">Add</button>
+        </div>
+      </div>
+    </div>
+    <div class="sec-card">
+      <div class="sec-hdr" onclick="tog(this)"><span class="si">📋</span><span class="st">Subject rules</span><span class="sa">▾</span></div>
+      <div class="sec-body">
+        <div class="tog-row"><div><div class="tl">Allow double periods</div></div><label class="tog"><input type="checkbox" checked><span class="tog-track"></span><span class="tog-thumb"></span></label></div>
+        <div class="tog-row"><div><div class="tl">Spread across the week</div></div><label class="tog"><input type="checkbox" checked><span class="tog-track"></span><span class="tog-thumb"></span></label></div>
+        <div class="tog-row"><div><div class="tl">Morning preference for core subjects</div></div><label class="tog"><input type="checkbox" checked><span class="tog-track"></span><span class="tog-thumb"></span></label></div>
+        <div class="tog-row"><div><div class="tl">Lab subjects need special rooms</div></div><label class="tog"><input type="checkbox" checked><span class="tog-track"></span><span class="tog-thumb"></span></label></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAFF -->
+  <div class="page" id="page-staff">
+    <div class="sec-card">
+      <div class="sec-hdr" onclick="tog(this)"><span class="si">👩‍🏫</span><span class="st">Teacher profiles</span><span class="sa">▾</span></div>
+      <div class="sec-body">
+        <div class="item-list" id="staff-list"></div>
+        <div class="add-row">
+          <input id="new-staff" placeholder="Teacher name"/>
+          <input id="new-staff-subj" placeholder="Subject(s)"/>
+          <select id="new-staff-type"><option>Full-time</option><option>Part-time</option></select>
+          <button class="btn primary" onclick="addStaff()">Add</button>
+        </div>
+      </div>
+    </div>
+    <div class="sec-card">
+      <div class="sec-hdr" onclick="tog(this)"><span class="si">⚖️</span><span class="st">Workload limits</span><span class="sa">▾</span></div>
+      <div class="sec-body">
+        <div class="fgrid">
+          <div class="fg"><label class="fl">Max periods/day</label><input type="number" value="5"/></div>
+          <div class="fg"><label class="fl">Max periods/week</label><input type="number" value="25"/></div>
+          <div class="fg"><label class="fl">Min free periods/day</label><input type="number" value="1"/></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROOMS -->
+  <div class="page" id="page-rooms">
+    <div class="sec-card">
+      <div class="sec-hdr" onclick="tog(this)"><span class="si">🏠</span><span class="st">Room list</span><span class="sa">▾</span></div>
+      <div class="sec-body">
+        <div class="item-list" id="room-list"></div>
+        <div class="add-row">
+          <input id="new-room" placeholder="Room name / number"/>
+          <select id="new-room-type"><option>Classroom</option><option>Lab</option><option>Studio</option><option>Gym / Hall</option><option>Lecture hall</option><option>Library</option></select>
+          <input type="number" id="new-room-cap" placeholder="Capacity" style="width:90px"/>
+          <button class="btn primary" onclick="addRoom()">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONSTRAINTS -->
+  <div class="page" id="page-constraints">
+    <div class="sec-card">
+      <div class="sec-hdr" onclick="tog(this)"><span class="si">🚫</span><span class="st">Clash prevention</span><span class="sa">▾</span></div>
+      <div class="sec-body">
+        <div class="tog-row"><div><div class="tl">No teacher clash</div></div><label class="tog"><input type="checkbox" checked disabled><span class="tog-track"></span><span class="tog-thumb"></span></label></div>
+        <div class="tog-row"><div><div class="tl">No room clash</div></div><label class="tog"><input type="checkbox" checked disabled><span class="tog-track"></span><span class="tog-thumb"></span></label></div>
+        <div class="tog-row"><div><div class="tl">No class clash</div></div><label class="tog"><input type="checkbox" checked disabled><span class="tog-track"></span><span class="tog-thumb"></span></label></div>
+      </div>
+    </div>
+    <div class="sec-card">
+      <div class="sec-hdr" onclick="tog(this)"><span class="si">📏</span><span class="st">Scheduling preferences</span><span class="sa">▾</span></div>
+      <div class="sec-body">
+        <div class="tog-row"><div><div class="tl">Allow gaps in teacher schedule</div></div><label class="tog"><input type="checkbox" checked><span class="tog-track"></span><span class="tog-thumb"></span></label></div>
+        <div class="tog-row"><div><div class="tl">No PE in first period</div></div><label class="tog"><input type="checkbox" checked><span class="tog-track"></span><span class="tog-thumb"></span></label></div>
+        <div class="tog-row"><div><div class="tl">Max consecutive same subject</div></div><select style="font-size:12px;padding:4px 8px;border:0.5px solid var(--brd2);border-radius:var(--rad);background:var(--bg2);color:var(--txt)"><option>1</option><option selected>2</option><option>3</option></select></div>
+      </div>
+    </div>
+    <div class="sec-card">
+      <div class="sec-hdr" onclick="tog(this)"><span class="si">🖨️</span><span class="st">Output & display</span><span class="sa">▾</span></div>
+      <div class="sec-body">
+        <div class="fgrid">
+          <div class="fg"><label class="fl">Default view</label><select><option>By class</option><option>By teacher</option><option>By room</option></select></div>
+          <div class="fg"><label class="fl">Print format</label><select><option>A4 Portrait</option><option>A4 Landscape</option><option>A3</option></select></div>
+          <div class="fg"><label class="fl">Color theme</label><select><option>Light</option><option>Dark</option><option>School colors</option></select></div>
+        </div>
+        <div style="margin-top:12px">
+          <div class="fl" style="margin-bottom:8px">Default export format</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <div class="format-chip sel" onclick="selFmt(this)">PDF</div>
+            <div class="format-chip" onclick="selFmt(this)">Excel</div>
+            <div class="format-chip" onclick="selFmt(this)">PNG</div>
+            <div class="format-chip" onclick="selFmt(this)">Print</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GENERATE -->
+  <div class="page" id="page-generate">
+    <div id="gen-alert" class="alert info">Configure institution, subjects, staff and rooms first.</div>
+    <div class="stats-row">
+      <div class="stat-card"><div class="sv" id="gen-subj">0</div><div class="slbl">Subjects</div></div>
+      <div class="stat-card"><div class="sv" id="gen-staff">0</div><div class="slbl">Teachers</div></div>
+      <div class="stat-card"><div class="sv" id="gen-rooms">0</div><div class="slbl">Rooms</div></div>
+      <div class="stat-card"><div class="sv">8</div><div class="slbl">Classes</div></div>
+    </div>
+    <div class="sec-card">
+      <div class="sec-body" style="text-align:center;padding:32px">
+        <div style="font-size:40px;margin-bottom:12px">✨</div>
+        <div style="font-size:15px;font-weight:500;margin-bottom:6px">Ready to generate</div>
+        <div style="font-size:13px;color:var(--txt2);margin-bottom:20px">The engine assigns subjects, teachers and rooms while respecting every constraint.</div>
+        <div class="prog-bar" id="gen-prog" style="display:none"><div class="prog-fill" id="gen-fill" style="width:0%"></div></div>
+        <div id="gen-status" style="font-size:12px;color:var(--txt2);margin:8px 0;min-height:16px"></div>
+        <button class="btn primary" style="font-size:14px;padding:10px 28px" onclick="generateTimetable()">Generate timetable</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIMETABLE VIEW -->
+  <div class="page" id="page-timetable">
+    <div class="export-bar">
+      <span style="font-size:12px;font-weight:500;color:var(--txt2)">Export timetable</span>
+      <div class="exp-btns">
+        <button class="exp-btn pdf" onclick="doExport('pdf')"><span>📄</span> PDF</button>
+        <button class="exp-btn xlsx" onclick="doExport('xlsx')"><span>📊</span> Excel</button>
+        <button class="exp-btn png" onclick="doExport('png')"><span>🖼️</span> PNG</button>
+        <button class="exp-btn prnt" onclick="doExport('print')"><span>🖨️</span> Print</button>
+      </div>
+    </div>
+    <div class="chip-row">
+      <div class="chip active" onclick="ttView(this,'class')">By class</div>
+      <div class="chip" onclick="ttView(this,'teacher')">By teacher</div>
+      <div class="chip" onclick="ttView(this,'room')">By room</div>
+    </div>
+    <div class="chip-row" id="class-chips"></div>
+    <div class="sec-card">
+      <div class="sec-body tt-grid">
+        <table class="tt"><thead><tr id="tt-head"></tr></thead><tbody id="tt-body"></tbody></table>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  </div>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
