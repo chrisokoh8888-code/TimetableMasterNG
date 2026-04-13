@@ -317,6 +317,24 @@ function generateTimetable() {
   classes.forEach(cls => {
     grid[cls] = {};
 
+    // 🔥 STEP 1: Build weekly subject pool
+    let weeklyPool = [];
+
+    state.subjects.forEach(subj => {
+      for (let i = 0; i < subj.periods; i++) {
+        weeklyPool.push({
+          name: subj.name,
+          color: subj.color
+        });
+      }
+    });
+
+    // 🔀 Shuffle pool
+    weeklyPool = weeklyPool.sort(() => Math.random() - 0.5);
+
+    let poolIndex = 0;
+
+    // 🔥 STEP 2: Distribute across days
     activeDays.forEach(day => {
       grid[cls][day] = [];
 
@@ -325,17 +343,24 @@ function generateTimetable() {
 
       for (let i = 0; i < totalPeriods; i++) {
 
-        let attempts = 0;
-        let subj;
+        // ♻️ recycle if pool finishes
+        if (poolIndex >= weeklyPool.length) {
+          poolIndex = 0;
+        }
 
-        do {
-          subj = state.subjects[Math.floor(Math.random() * state.subjects.length)];
+        let subj = weeklyPool[poolIndex];
+        let attempts = 0;
+
+        // 🔥 avoid duplicates + daily limit
+        while (
+          (subj.name === lastSubject ||
+          (subjectCount[subj.name] || 0) >= 2) &&
+          attempts < 10
+        ) {
+          poolIndex = (poolIndex + 1) % weeklyPool.length;
+          subj = weeklyPool[poolIndex];
           attempts++;
-          if (attempts > 15) break;
-        } while (
-          subj.name === lastSubject ||
-          (subjectCount[subj.name] || 0) >= 2
-        );
+        }
 
         grid[cls][day].push({
           label: subj.name,
@@ -344,6 +369,8 @@ function generateTimetable() {
 
         subjectCount[subj.name] = (subjectCount[subj.name] || 0) + 1;
         lastSubject = subj.name;
+
+        poolIndex++;
       }
     });
   });
