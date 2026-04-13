@@ -26,3 +26,24 @@ button {
   border: none;
   cursor: pointer;
 }
+.tt-wrapper {
+  overflow-x: auto;
+  margin-bottom: 20px;
+}
+
+.tt-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+}
+
+.tt-table th, .tt-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.period-box {
+  min-width: 60px;
+  text-align: center;
+}
