@@ -2,7 +2,7 @@
 // SMART TIMETABLE GENERATOR
 // =======================
 
-import { state, DAYS } from '../data/state.js';
+import { state, DAYS } from './state.js';
 
 // =======================
 // MAIN GENERATOR
