@@ -45,7 +45,7 @@ body {
    SIDEBAR
 ======================= */
 .sidebar {
-  width: 160px; /* reduced from 240 */
+  width: 120px; /* reduced from 240 */
   background: #0d47a1;
   color: white;
   height: 100vh;
