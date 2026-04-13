@@ -192,56 +192,56 @@ function renderStructureForm() {
 
   document.getElementById('inst-type-display').textContent = type;
 
-  if (type === 'Secondary') {
+  if (type === 'Nursery') {
+    container.innerHTML = `
+      <input id="new-class" placeholder="e.g KG1, KG2, Creche">
+      <button onclick="addSimpleClass()">Add</button>
+    `;
+  }
+
+  else if (type === 'Primary') {
+    container.innerHTML = `
+      <input id="new-class" placeholder="e.g Primary 1, Primary 2, Primary 3">
+      <button onclick="addSimpleClass()">Add</button>
+    `;
+  }
+
+  else if (type === 'Secondary') {
     container.innerHTML = `
       <input id="new-class" placeholder="e.g JSS1, SS1">
       <input id="new-arms" type="number" placeholder="Arms (e.g 2)">
       <button onclick="addClass()">Add</button>
     `;
-  } else {
-    if (type === 'Nursery') {
-  container.innerHTML = `
-    <input id="new-class" placeholder="e.g KG1, KG2, Creche">
-    <button onclick="addSimpleClass()">Add</button>
-  `;
-}
-
-else if (type === 'Primary') {
-  container.innerHTML = `
-    <input id="new-class" placeholder="e.g Primary 1, Primary 2">
-    <button onclick="addSimpleClass()">Add</button>
-  `;
-}
-
-else if (type === 'Secondary') {
-  container.innerHTML = `
-    <input id="new-class" placeholder="e.g JSS1, SS1">
-    <input id="new-arms" type="number" placeholder="Arms (e.g 2)">
-    <button onclick="addClass()">Add</button>
-  `;
-}
-
-else if (type === 'Polytechnic') {
-  container.innerHTML = `
-    <input id="new-class" placeholder="e.g ND1, ND2, HND1">
-    <button onclick="addSimpleClass()">Add</button>
-  `;
-}
-
-else if (type === 'University') {
-  container.innerHTML = `
-    <input id="new-class" placeholder="e.g 100 Level, 200 Level">
-    <button onclick="addSimpleClass()">Add</button>
-  `;
-}
-
-else {
-  container.innerHTML = `
-    <input id="new-class" placeholder="Enter level">
-    <button onclick="addSimpleClass()">Add</button>
-  `;
-}
   }
+
+  else if (type === 'College') {
+    container.innerHTML = `
+      <input id="new-class" placeholder="e.g NCE 1, NCE 2">
+      <button onclick="addSimpleClass()">Add</button>
+    `;
+  }
+
+  else if (type === 'Polytechnic') {
+    container.innerHTML = `
+      <input id="new-class" placeholder="e.g ND1, ND2, HND1">
+      <button onclick="addSimpleClass()">Add</button>
+    `;
+  }
+
+  else if (type === 'University') {
+    container.innerHTML = `
+      <input id="new-class" placeholder="e.g 100 Level, 200 Level">
+      <button onclick="addSimpleClass()">Add</button>
+    `;
+  }
+
+  else {
+    container.innerHTML = `
+      <input id="new-class" placeholder="Enter level">
+      <button onclick="addSimpleClass()">Add</button>
+    `;
+  }
+}
 }
 
 function addClass() {
