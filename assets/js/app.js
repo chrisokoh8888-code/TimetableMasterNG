@@ -1,6 +1,6 @@
 // =======================
 // IMPORTS (MUST BE FIRST)
-import { state, DAYS, resetState } from '../data/state.js';
+import { state, DAYS, resetState } from './state.js';
 import { addSubject, renderSubjects, removeSubject } from './subjects.js';
 import { addStaff, renderStaff, removeStaff } from './staff.js';
 import { addRoom, renderRooms, removeRoom } from './rooms.js';
