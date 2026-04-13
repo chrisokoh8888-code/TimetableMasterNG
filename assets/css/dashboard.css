@@ -1,4 +1,33 @@
 /* =======================
+   MOBILE FIX
+======================= */
+@media (max-width: 768px) {
+  .sidebar {
+    width: 140px;
+    padding: 15px 10px;
+  }
+
+  .main {
+    margin-left: 140px;
+    width: calc(100% - 140px);
+    padding: 15px;
+  }
+
+  .logo h2 {
+    font-size: 16px;
+  }
+
+  .logo p {
+    font-size: 10px;
+  }
+
+  .nav-item {
+    font-size: 13px;
+    padding: 10px;
+  }
+}
+
+/* =======================
    GLOBAL
 ======================= */
 body {
@@ -16,7 +45,7 @@ body {
    SIDEBAR
 ======================= */
 .sidebar {
-  width: 200px; /* reduced from 240 */
+  width: 180px; /* reduced from 240 */
   background: #0d47a1;
   color: white;
   height: 100vh;
@@ -65,10 +94,8 @@ body {
    MAIN LAYOUT
 ======================= */
 .main {
-  margin-left: 200px;
-  padding: 25px 20px;
-  width: calc(100% - 200px);
-  box-sizing: border-box;
+  margin-left: 180px;
+  width: calc(100% - 180px);
 }
 
 /* =======================
