@@ -94,7 +94,7 @@ body {
    MAIN LAYOUT
 ======================= */
 .main {
-  margin-left: 160px;
+  margin-left: 120px;
   width: calc(100% - 160px);
 }
 
