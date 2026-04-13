@@ -94,9 +94,11 @@ body {
    MAIN LAYOUT
 ======================= */
 .main {
-  margin-left: 120px;
-  width: calc(100% - 160px);
-  }
+  margin-left: 200px; /* MUST match sidebar width */
+  padding: 20px;
+  width: calc(100% - 200px);
+  box-sizing: border-box;
+}
 
 /* =======================
    TOPBAR
