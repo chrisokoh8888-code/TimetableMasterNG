@@ -51,7 +51,6 @@ body {
   height: 100vh;
   position: fixed;
   padding: 20px;
-  z-index: 1000; /* ✅ ADD THIS HERE */
 }
 
 .logo h2 {
@@ -97,9 +96,7 @@ body {
 .main {
   margin-left: 120px;
   width: calc(100% - 160px);
-  position: relative; /* ✅ ADD THIS HERE */
-  z-index: 1;         /* ✅ ADD THIS HERE */
-}
+  }
 
 /* =======================
    TOPBAR
