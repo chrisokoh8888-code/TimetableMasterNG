@@ -194,14 +194,14 @@ function renderStructureForm() {
 
   if (type === 'Nursery') {
     container.innerHTML = `
-      <input id="new-class" placeholder="e.g KG1, KG2, Creche">
+      <input id="new-class" placeholder="e.g KG1, KG2">
       <button onclick="addSimpleClass()">Add</button>
     `;
   }
 
   else if (type === 'Primary') {
     container.innerHTML = `
-      <input id="new-class" placeholder="e.g Primary 1, Primary 2, Primary 3">
+      <input id="new-class" placeholder="e.g Primary 1, Primary 2">
       <button onclick="addSimpleClass()">Add</button>
     `;
   }
@@ -241,7 +241,6 @@ function renderStructureForm() {
       <button onclick="addSimpleClass()">Add</button>
     `;
   }
-}
 }
 
 function addClass() {
